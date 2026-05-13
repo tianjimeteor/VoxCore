@@ -1,0 +1,23 @@
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      production:
+        patterns: ["*"]
+        exclude-patterns: ["pytest*", "ruff*", "mypy*", "pip-audit"]
+      dev:
+        patterns: ["pytest*", "ruff*", "mypy*", "pip-audit"]
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: docker
+    directory: "/"
+    schedule:
+      interval: weekly

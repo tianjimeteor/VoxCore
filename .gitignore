@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.egg
+build/
+dist/
+.eggs/
+wheels/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# Test / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# Database / runtime
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+*.log
+*.pid
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Docs build
+docs/_build/
+site/
+
+# Local config (may contain secrets)
+config.local.json
+credentials.json
+secrets/
+
+# Node (for web_demo)
+node_modules/
+dist-web/

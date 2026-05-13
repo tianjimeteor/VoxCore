@@ -1,0 +1,110 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "voxcore"
+version = "0.1.0"
+description = "The open real-time voice AI engine — ASR + LLM + Vision in one stream."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "VoxCore Authors" }]
+keywords = [
+    "asr",
+    "llm",
+    "voice",
+    "realtime",
+    "websocket",
+    "fastapi",
+    "ai",
+    "streaming",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Framework :: FastAPI",
+]
+
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "pydantic>=2.5",
+    "pydantic-settings>=2.0",
+    "sqlalchemy>=2.0",
+    "python-jose[cryptography]>=3.3",
+    "passlib[bcrypt]>=1.7.4",
+    "bcrypt>=4.0.1",
+    "httpx>=0.25",
+    "websockets>=12.0",
+    "python-dotenv>=1.0",
+    "python-multipart>=0.0.6",
+    "click>=8.1",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-asyncio>=0.21",
+    "pytest-cov>=4.1",
+    "ruff>=0.3",
+    "mypy>=1.8",
+    "types-python-jose",
+    "pip-audit>=2.7",
+]
+whisper = ["faster-whisper>=1.0"]
+postgres = ["psycopg[binary]>=3.1"]
+
+[project.urls]
+Homepage = "https://github.com/tianjimeteor/VoxCore"
+Documentation = "https://github.com/tianjimeteor/VoxCore#readme"
+Repository = "https://github.com/tianjimeteor/VoxCore"
+Issues = "https://github.com/tianjimeteor/VoxCore/issues"
+Changelog = "https://github.com/tianjimeteor/VoxCore/releases"
+
+[project.scripts]
+voxcore = "voxcore.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["voxcore"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "N", "S", "A", "C4", "PT", "RUF"]
+ignore = [
+    "S101", # assert is fine in tests
+    "B008", # FastAPI depends on Depends() as default arg
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S", "N802"]
+"examples/**" = ["S"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+ignore_missing_imports = true
+disallow_untyped_decorators = false
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+asyncio_mode = "auto"
+addopts = [
+    "-ra",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=voxcore",
+    "--cov-report=term-missing",
+]
+testpaths = ["tests"]
