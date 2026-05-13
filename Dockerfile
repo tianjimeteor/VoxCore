@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.6
 # Multi-stage build for VoxCore — produces a minimal, non-root runtime image.
 
-FROM python:3.12-slim AS builder
+FROM python:3.14-slim AS builder
 
 ENV PIP_NO_CACHE_DIR=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
@@ -16,7 +16,7 @@ RUN pip install --upgrade pip build && \
     python -m build --wheel
 
 
-FROM python:3.12-slim AS runtime
+FROM python:3.14-slim AS runtime
 
 # Security: non-root user
 RUN groupadd --system --gid 1001 voxcore && \
