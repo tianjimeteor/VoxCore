@@ -15,7 +15,17 @@ def test_ws_requires_token(client: TestClient) -> None:
             ws.receive_text()
 
 
-def test_ws_echo_round_trip(client: TestClient) -> None:
+def test_ws_echo_round_trip(app, client: TestClient) -> None:
+    # Wire the LLM to stream chunks back over the WebSocket; without this,
+    # VoxCore is intentionally hands-off and won't emit anything after the
+    # transcript echo. This matches what an integrating app would write.
+    @app.on_transcript
+    async def _stream_back(text, ctx):
+        if app.llm is None:
+            return
+        async for chunk in app.llm.complete(text):
+            await ctx.websocket.send_json({"type": "chunk", "text": chunk})
+
     username = "ws" + uuid.uuid4().hex[:8]
     r = client.post(
         "/auth/register", json={"username": username, "password": "strongpass123"}
