@@ -26,11 +26,11 @@ def hash_password(plain: str) -> str:
         raise ValueError(
             f"password must be at least {settings.min_password_length} characters"
         )
-    return _pwd.hash(plain)
+    return _pwd.hash(plain)  # type: ignore[no-any-return]
 
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return _pwd.verify(plain, hashed)
+    return _pwd.verify(plain, hashed)  # type: ignore[no-any-return]
 
 
 # ----- JWT -------------------------------------------------------------------

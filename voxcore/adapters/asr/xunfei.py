@@ -40,4 +40,4 @@ class XunfeiASR(ASRAdapter):
             "Contribute an implementation — see CONTRIBUTING.md."
         )
         if False:  # pragma: no cover
-            yield  # type: ignore[unreachable]
+            yield

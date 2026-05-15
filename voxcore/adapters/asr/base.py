@@ -27,4 +27,4 @@ class ASRAdapter(ABC):
         """Consume an async audio stream, yield partial + final transcripts."""
         raise NotImplementedError
         if False:  # pragma: no cover — make mypy treat this as an async generator
-            yield  # type: ignore[unreachable]
+            yield

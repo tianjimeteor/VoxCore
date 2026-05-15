@@ -116,7 +116,7 @@ class VoxCore:
 
 def _resolve_asr(ref: str | ASRAdapter | None) -> ASRAdapter | None:
     if ref is None or isinstance(ref, ASRAdapter):
-        return ref  # type: ignore[return-value]
+        return ref
     from ..adapters.asr import get_asr_adapter
 
     return get_asr_adapter(ref)
@@ -124,7 +124,7 @@ def _resolve_asr(ref: str | ASRAdapter | None) -> ASRAdapter | None:
 
 def _resolve_llm(ref: str | LLMAdapter | None) -> LLMAdapter | None:
     if ref is None or isinstance(ref, LLMAdapter):
-        return ref  # type: ignore[return-value]
+        return ref
     from ..adapters.llm import get_llm_adapter
 
     return get_llm_adapter(ref)
@@ -132,7 +132,7 @@ def _resolve_llm(ref: str | LLMAdapter | None) -> LLMAdapter | None:
 
 def _resolve_vision(ref: str | VisionAdapter | None) -> VisionAdapter | None:
     if ref is None or isinstance(ref, VisionAdapter):
-        return ref  # type: ignore[return-value]
+        return ref
     from ..adapters.vision import get_vision_adapter
 
     return get_vision_adapter(ref)

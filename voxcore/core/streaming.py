@@ -32,19 +32,19 @@ async def stream(source: _StreamLike) -> AsyncIterator[str]:
             ...
     """
     if inspect.isawaitable(source):
-        source = await source  # type: ignore[assignment]
+        source = await source
 
     if isinstance(source, str):
         yield source
         return
 
     if hasattr(source, "__aiter__"):
-        async for chunk in source:  # type: ignore[union-attr]
+        async for chunk in source:
             yield chunk
         return
 
     if hasattr(source, "__iter__"):
-        for chunk in source:  # type: ignore[union-attr]
+        for chunk in source:
             yield chunk
         return
 

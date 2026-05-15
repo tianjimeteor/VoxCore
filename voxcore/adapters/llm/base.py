@@ -20,4 +20,4 @@ class LLMAdapter(ABC):
         """Stream tokens (as text chunks) for the given prompt."""
         raise NotImplementedError
         if False:  # pragma: no cover
-            yield  # type: ignore[unreachable]
+            yield
