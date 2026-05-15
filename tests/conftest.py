@@ -17,6 +17,7 @@ from fastapi.testclient import TestClient
 
 from voxcore import VoxCore
 from voxcore.database import Base, engine
+from voxcore import models  # noqa: F401 -- register ORM models with Base.metadata
 
 
 @pytest.fixture(scope="session", autouse=True)
