@@ -12,11 +12,11 @@ os.environ.setdefault(
 )
 os.environ.setdefault("DATABASE_URL", "sqlite:///./voxcore-test.db")
 
-import pytest  # noqa: E402
-from fastapi.testclient import TestClient  # noqa: E402
+import pytest
+from fastapi.testclient import TestClient
 
-from voxcore import VoxCore  # noqa: E402
-from voxcore.database import Base, engine  # noqa: E402
+from voxcore import VoxCore
+from voxcore.database import Base, engine
 
 
 @pytest.fixture(scope="session", autouse=True)

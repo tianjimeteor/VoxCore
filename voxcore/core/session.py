@@ -18,10 +18,10 @@ class SessionContext:
 
     session_id: str
     user_id: int | None = None
-    websocket: "WebSocket | None" = None
-    asr: "ASRAdapter | None" = None
-    llm: "LLMAdapter | None" = None
-    vision: "VisionAdapter | None" = None
+    websocket: WebSocket | None = None
+    asr: ASRAdapter | None = None
+    llm: LLMAdapter | None = None
+    vision: VisionAdapter | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
     async def send(self, chunk: str) -> None:

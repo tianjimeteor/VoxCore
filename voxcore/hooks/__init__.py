@@ -17,7 +17,7 @@ class BillingHook:
     Default behavior: record nothing. Return ``True`` to allow the operation.
     """
 
-    async def can_consume(self, user_id: int, service: str, amount: float) -> bool:  # noqa: ARG002
+    async def can_consume(self, user_id: int, service: str, amount: float) -> bool:
         return True
 
     async def record_usage(

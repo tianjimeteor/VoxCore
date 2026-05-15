@@ -13,9 +13,9 @@ class EchoLLM(LLMAdapter):
         self,
         prompt: str,
         *,
-        system: str | None = None,  # noqa: ARG002
-        max_tokens: int = 512,  # noqa: ARG002
-        temperature: float = 0.7,  # noqa: ARG002
+        system: str | None = None,
+        max_tokens: int = 512,
+        temperature: float = 0.7,
     ) -> AsyncIterator[str]:
         for word in prompt.split():
             yield word + " "

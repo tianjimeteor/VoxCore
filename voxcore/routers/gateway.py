@@ -114,12 +114,12 @@ async def gateway(websocket: WebSocket, token: str = Query(default="")) -> None:
 
     except (WebSocketDisconnect, asyncio.TimeoutError):
         pass
-    except Exception:  # noqa: BLE001
+    except Exception:
         logger.exception("gateway loop failed")
     finally:
         await audio_queue.put(None)
         asr_task.cancel()
         try:
             await asr_task
-        except (asyncio.CancelledError, Exception):  # noqa: BLE001
-            pass
+        except (asyncio.CancelledError, Exception):  # noqa: S110
+            pass  # ASR task already torn down; nothing to do here

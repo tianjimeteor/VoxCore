@@ -11,5 +11,5 @@ from __future__ import annotations
 from .core.facade import VoxCore
 from .core.streaming import stream
 
-__all__ = ["VoxCore", "stream", "__version__"]
+__all__ = ["VoxCore", "__version__", "stream"]
 __version__ = "0.1.0"

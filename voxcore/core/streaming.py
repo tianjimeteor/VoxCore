@@ -8,10 +8,10 @@ that return iterables, etc. It exists so the 20-line demo in the README can
 from __future__ import annotations
 
 import inspect
-from collections.abc import AsyncIterator, Awaitable
-from typing import AsyncIterable, Iterable, Union
+from collections.abc import AsyncIterable, AsyncIterator, Awaitable, Iterable
+from typing import Union
 
-_StreamLike = Union[
+_StreamLike = Union[  # noqa: UP007 -- explicit Union keeps this multiline alias readable
     str,
     Iterable[str],
     AsyncIterable[str],

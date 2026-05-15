@@ -12,7 +12,6 @@ from __future__ import annotations
 
 import logging
 from collections.abc import Awaitable, Callable
-from typing import Any
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -64,7 +63,7 @@ class VoxCore:
         for handler in self._transcript_handlers:
             try:
                 await handler(text, ctx)
-            except Exception:  # noqa: BLE001 — handlers are user code; never crash the gateway
+            except Exception:
                 logger.exception("transcript handler raised; continuing")
 
     def asgi(self) -> FastAPI:
@@ -85,10 +84,10 @@ class VoxCore:
     # ----- Internal ---------------------------------------------------------
 
     def _build_app(self, *, title: str, version: str) -> FastAPI:
+        from ..database import init_db
         from ..routers import auth as auth_router
         from ..routers import gateway as gateway_router
         from ..routers import health as health_router
-        from ..database import init_db
 
         app = FastAPI(title=title, version=version)
 
