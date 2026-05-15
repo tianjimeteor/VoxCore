@@ -108,6 +108,49 @@ The process aborts with a clear error. No "TODO fix before prod" comments that n
 
 ---
 
+## 📦 Download Apps
+
+> Don't want to write code? Grab a ready-to-run desktop bundle.
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### 🎬 [VoxStream](apps/voxstream/) — OBS / B站 / Twitch live captions
+
+Local WebSocket caption server + transparent overlay page for [OBS Browser Source](https://obsproject.com/). 4 themes (streaming / classroom / meeting / minimal), optional live translation.
+
+* **Windows / macOS / Linux** — [Releases ▸](https://github.com/tianjimeteor/VoxCore/releases?q=voxstream)
+* **Try in browser** — [Hugging Face Space ▸](apps/voxstream/huggingface/)
+
+```bash
+pip install -e "apps/voxstream"
+voxstream serve --asr echo
+# add http://localhost:7860/overlay as a Browser Source in OBS
+```
+
+</td>
+<td width="50%" valign="top">
+
+### 📝 [VoxNote](apps/voxnote/) — privacy-first meeting notebook
+
+Desktop window (PyWebView + Vue 3) — record, transcribe, summarize, search. Action items auto-extracted. SQLite + FTS5. 100% local optional with `whisper-local`.
+
+* **Windows installer / macOS dmg / Linux AppImage** — [Releases ▸](https://github.com/tianjimeteor/VoxCore/releases?q=voxnote)
+
+```bash
+pip install -e "apps/voxnote[local]"
+python -m voxnote
+```
+
+</td>
+</tr>
+</table>
+
+Both apps are **monorepo siblings** under [`apps/`](apps/) — they reuse the VoxCore facade and adapter registry, so anything you add to VoxCore (a new ASR, a new LLM) lights up in both products immediately.
+
+---
+
 ## 🚀 60-Second Demo
 
 ```bash

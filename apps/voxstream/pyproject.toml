@@ -1,0 +1,52 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+[project]
+name = "voxstream"
+version = "0.1.0"
+description = "OBS Browser Source live captions powered by VoxCore — drop-in real-time subtitles for streamers, lecturers, and meetings."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+authors = [{ name = "VoxCore Authors" }]
+keywords = [
+  "obs", "obs-studio", "captions", "subtitles", "live-streaming",
+  "asr", "speech-to-text", "voxcore", "voice-ai",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: End Users/Desktop",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Multimedia :: Sound/Audio :: Capture/Recording",
+]
+dependencies = [
+  "voxcore>=0.1.0",
+  "fastapi>=0.110",
+  "uvicorn[standard]>=0.27",
+  "sounddevice>=0.4.6",
+  "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+windows = ["pyaudiowpatch>=0.2.12"]
+build = ["pyinstaller>=6.0"]
+dev = ["pytest>=7.4", "httpx>=0.27"]
+
+[project.scripts]
+voxstream = "voxstream.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/tianjimeteor/VoxCore/tree/main/apps/voxstream"
+Issues = "https://github.com/tianjimeteor/VoxCore/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["voxstream"]
+include = ["voxstream/**/*", "../overlay/**/*"]
+
+[tool.hatch.build.targets.sdist]
+include = ["voxstream/**", "overlay/**", "README.md", "pyproject.toml"]

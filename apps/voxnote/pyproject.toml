@@ -1,0 +1,53 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+[project]
+name = "voxnote"
+version = "0.2.0"
+description = "Desktop meeting note-taker — live captions, incremental summary, action-item extraction. Powered by VoxCore."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+authors = [{ name = "VoxCore Authors" }]
+keywords = [
+  "meeting", "notes", "transcription", "voice-ai", "voxcore",
+  "speech-to-text", "summarization", "action-items", "desktop",
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: End Users/Desktop",
+  "License :: OSI Approved :: Apache Software License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Office/Business",
+]
+dependencies = [
+  "voxcore>=0.1.0",
+  "pywebview>=5.0",
+  "sounddevice>=0.4.6",
+  "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+windows = ["pyaudiowpatch>=0.2.12"]
+local   = ["faster-whisper>=1.0"]
+export  = ["python-docx>=1.0"]
+build   = ["pyinstaller>=6.0"]
+dev     = ["pytest>=7.4", "pytest-asyncio>=0.23"]
+
+[project.scripts]
+voxnote = "voxnote.main:main"
+
+[project.urls]
+Homepage = "https://github.com/tianjimeteor/VoxCore/tree/main/apps/voxnote"
+Issues   = "https://github.com/tianjimeteor/VoxCore/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["voxnote"]
+include = ["voxnote/**/*", "../ui/**/*"]
+
+[tool.hatch.build.targets.sdist]
+include = ["voxnote/**", "ui/**", "README.md", "pyproject.toml"]

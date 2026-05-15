@@ -1,0 +1,30 @@
+# VoxNote-specific build & runtime artefacts.
+
+# PyInstaller / installer outputs land in repo-level dist/, but ignore stray
+# attempts at producing them inside this package too.
+build/
+dist/
+*.spec.bak
+
+# PyInstaller intermediates when run with apps/voxnote as cwd.
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+
+# Per-user runtime data (db, exports, models) if someone runs the app
+# in-place without installing it.
+voxnote.db
+voxnote.db-*
+exports/
+models/
+
+# Real icon binaries are owner-supplied.
+packaging/icon.ico
+packaging/icon.icns
+packaging/icon.png
+
+# Test artefacts
+.pytest_cache/
+.coverage
+htmlcov/

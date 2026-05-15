@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VoxNote</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">Vox</span><span class="brand-mark accent">Note</span>
+        <span class="badge" v-if="info.version">v{{ info.version }}</span>
+      </div>
+
+      <button class="primary record" :class="{ recording: isRecording }" @click="toggleRecording">
+        <span class="dot"></span>
+        <span v-if="!isRecording">Start recording</span>
+        <span v-else>Stop &middot; {{ formatDuration(recordingMs) }}</span>
+      </button>
+
+      <div class="search">
+        <input v-model="searchQuery" @keydown.enter="runSearch" placeholder="Search transcripts" />
+      </div>
+
+      <div class="sessions">
+        <div class="section-title">Sessions</div>
+        <ul>
+          <li v-for="s in filteredSessions"
+              :key="s.id"
+              :class="{ active: s.id === activeSessionId }"
+              @click="openSession(s.id)">
+            <div class="title">{{ s.title }}</div>
+            <div class="meta">
+              <span>{{ formatDate(s.started_at) }}</span>
+              <span v-if="s.duration_ms">&middot; {{ formatDuration(s.duration_ms) }}</span>
+            </div>
+          </li>
+          <li v-if="!filteredSessions.length" class="empty">No sessions yet.</li>
+        </ul>
+      </div>
+
+      <div class="footer">
+        <span>ASR: <code>{{ info.asr || "echo" }}</code></span>
+        <span>LLM: <code>{{ info.llm || "echo" }}</code></span>
+      </div>
+    </aside>
+
+    <!-- Main column -->
+    <main class="main">
+      <header class="topbar">
+        <input class="title-input"
+               v-model="activeTitle"
+               @blur="saveTitle"
+               placeholder="Untitled session" />
+        <div class="actions">
+          <button @click="exportSession('md')" :disabled="!activeSessionId">Export MD</button>
+          <button @click="exportSession('docx')" :disabled="!activeSessionId">DOCX</button>
+          <button @click="exportSession('srt')" :disabled="!activeSessionId">SRT</button>
+          <button class="ghost" @click="openExportFolder">Open folder</button>
+        </div>
+      </header>
+
+      <section class="captions" ref="captionPane">
+        <div v-for="(line, i) in captions" :key="i"
+             class="caption"
+             :class="{ partial: !line.final }">
+          <span class="ts">{{ formatTs(line.ts) }}</span>
+          <span class="speaker" v-if="line.speaker">{{ line.speaker }}</span>
+          <span class="text">{{ line.text }}</span>
+        </div>
+        <div v-if="!captions.length" class="hint">
+          <p>Click <b>Start recording</b>. Live captions will appear here as you speak.</p>
+          <p>Tip: meeting bots, interviews, lectures, podcasts &mdash; anything with audio.</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Right column: summary + todos -->
+    <aside class="summary">
+      <header>
+        <span class="section-title">Live summary</span>
+        <span class="kind" v-if="summary">{{ summary.kind }}</span>
+      </header>
+
+      <article v-if="summary" class="summary-body">
+        <pre>{{ summary.summary_md }}</pre>
+      </article>
+      <p v-else class="hint">Summary appears after ~30 seconds of speech.</p>
+
+      <header>
+        <span class="section-title">Action items</span>
+      </header>
+      <ul class="todos" v-if="summary && summary.todos.length">
+        <li v-for="(t, i) in summary.todos" :key="i">
+          <input type="checkbox" :id="'todo-' + i" />
+          <label :for="'todo-' + i">{{ t }}</label>
+        </li>
+      </ul>
+      <p v-else class="hint">No action items detected yet.</p>
+
+      <div v-if="searchResults.length" class="search-results">
+        <header>
+          <span class="section-title">Search</span>
+          <button class="ghost" @click="searchResults = []">clear</button>
+        </header>
+        <ul>
+          <li v-for="r in searchResults"
+              :key="r.session_id + '-' + r.text"
+              @click="openSession(r.session_id)">
+            <div class="title">{{ r.title }}</div>
+            <div class="snippet" v-html="r.snip"></div>
+          </li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <script src="https://unpkg.com/vue@3.4.27/dist/vue.global.prod.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

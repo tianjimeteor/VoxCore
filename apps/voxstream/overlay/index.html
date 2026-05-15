@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VoxStream caption overlay</title>
+  <link rel="stylesheet" href="/overlay/style.css" />
+</head>
+<body class="theme-streaming">
+  <div id="root">
+    <div id="status" class="status status--connecting" title="Connection status"></div>
+
+    <div id="captions" aria-live="polite">
+      <!-- Caption lines are inserted here by caption.js. -->
+    </div>
+
+    <div id="hint">
+      <code id="hint-url"></code>
+      <p>Add this page as an OBS Browser Source &mdash; transparent background, captions only.</p>
+    </div>
+  </div>
+
+  <script src="/overlay/caption.js"></script>
+</body>
+</html>

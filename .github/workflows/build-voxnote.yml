@@ -1,0 +1,110 @@
+name: Build VoxNote
+
+on:
+  push:
+    tags: ["voxnote-v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # ---- Linux: PyWebView needs WebKitGTK ----
+      - name: Install Linux WebKit deps
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-0 libwebkit2gtk-4.1-dev libgtk-3-dev appstream
+
+      - name: Install appimagetool (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          curl -L -o /tmp/appimagetool "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
+          chmod +x /tmp/appimagetool
+          sudo mv /tmp/appimagetool /usr/local/bin/appimagetool
+
+      # ---- macOS: create-dmg ----
+      - name: Install create-dmg (macOS)
+        if: runner.os == 'macOS'
+        run: brew install create-dmg
+
+      # ---- Windows: Inno Setup ----
+      - name: Install Inno Setup (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: choco install innosetup -y --no-progress
+
+      - name: Build (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          powershell -ExecutionPolicy Bypass -File apps/voxnote/packaging/build.ps1
+
+      - name: Build (macOS)
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          bash apps/voxnote/packaging/build.sh
+          bash apps/voxnote/packaging/build-dmg.sh
+
+      - name: Build (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          bash apps/voxnote/packaging/build.sh
+          bash apps/voxnote/packaging/build-appimage.sh
+
+      - name: Upload artefact
+        uses: actions/upload-artifact@v4
+        with:
+          name: voxnote-${{ matrix.os }}
+          path: |
+            dist/voxnote-*.zip
+            dist/voxnote-*.tar.gz
+            dist/voxnote-*-setup.exe
+            dist/voxnote-*.dmg
+            dist/voxnote-*.AppImage
+          if-no-files-found: error
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/voxnote-v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Compute checksums
+        run: |
+          cd dist
+          sha256sum voxnote-* > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/voxnote-*
+            dist/SHA256SUMS.txt
+          generate_release_notes: true
+          name: VoxNote ${{ github.ref_name }}
+          body: |
+            VoxNote desktop app — privacy-first voice meeting notebook.
+
+            See [apps/voxnote/README.md](https://github.com/tianjimeteor/VoxCore/blob/main/apps/voxnote/README.md).
