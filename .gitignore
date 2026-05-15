@@ -1,4 +1,4 @@
-# Python
+﻿# Python
 __pycache__/
 *.pyc
 *.pyo
@@ -43,7 +43,7 @@ Thumbs.db
 
 # Docs build
 docs/_build/
-site/
+# site/  # used as GitHub Pages source (do not ignore)
 
 # Local config (may contain secrets)
 config.local.json

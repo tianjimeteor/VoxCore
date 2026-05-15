@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VoxCore — Real-time Voice AI Engine</title>
+<meta name="description" content="Open real-time voice AI engine — streaming ASR + LLM + Vision with sub-second latency. One facade, pluggable adapters, secure by default.">
+<meta property="og:title" content="VoxCore — Real-time Voice AI Engine">
+<meta property="og:description" content="Streaming ASR + LLM + Vision, sub-second latency. One facade, pluggable adapters.">
+<meta name="theme-color" content="#0a0a0a">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0a0a;--bg2:#111;--fg:#e8e8e8;--dim:#888;--ac:#00ff9c;--ac2:#00d9ff;--bd:#1f1f1f;--m:"JetBrains Mono",monospace;--s:"Inter",system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--fg);font-family:var(--s);line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}code,pre{font-family:var(--m)}::selection{background:var(--ac);color:#000}
+nav{position:sticky;top:0;z-index:50;background:rgba(10,10,10,.85);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--bd)}
+.nav-inner{max-width:1200px;margin:0 auto;padding:16px 24px;display:flex;align-items:center;gap:32px}
+.brand{font-family:var(--m);font-weight:700;font-size:18px;color:var(--ac);letter-spacing:-.02em}
+.nav-links{display:flex;gap:24px;flex:1}.nav-links a{font-size:14px;color:var(--dim);transition:color .15s}.nav-links a:hover{color:var(--fg)}
+.nav-cta{font-family:var(--m);font-size:13px;padding:8px 14px;border:1px solid var(--bd);border-radius:6px;transition:all .15s}.nav-cta:hover{border-color:var(--ac);color:var(--ac)}
+@media(max-width:720px){.nav-links{display:none}}
+.hero{max-width:1200px;margin:0 auto;padding:96px 24px 64px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:900px;height:700px;pointer-events:none;background:radial-gradient(ellipse at center,rgba(0,255,156,.10),transparent 60%);z-index:-1}
+.tag{display:inline-flex;align-items:center;gap:8px;font-family:var(--m);font-size:12px;color:var(--ac);padding:6px 12px;border:1px solid rgba(0,255,156,.3);border-radius:999px;margin-bottom:24px}
+.tag::before{content:"";width:6px;height:6px;background:var(--ac);border-radius:50%;box-shadow:0 0 8px var(--ac);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+h1{font-size:clamp(40px,6vw,72px);font-weight:800;line-height:1.05;letter-spacing:-.03em;margin-bottom:24px}
+h1 .g{background:linear-gradient(135deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-size:19px;color:var(--dim);max-width:640px;margin-bottom:40px}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:56px}
+.btn{font-family:var(--m);font-size:14px;font-weight:500;padding:12px 20px;border-radius:8px;transition:all .15s;display:inline-flex;align-items:center;gap:8px;border:1px solid var(--bd);cursor:pointer}
+.btn-p{background:var(--ac);color:#000;border-color:var(--ac)}.btn-p:hover{background:transparent;color:var(--ac);transform:translateY(-1px)}.btn-g:hover{border-color:var(--fg);transform:translateY(-1px)}
+.term{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;overflow:hidden;max-width:760px;box-shadow:0 30px 60px -20px rgba(0,255,156,.1)}
+.bar{padding:12px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;background:#161616}
+.dot{width:12px;height:12px;border-radius:50%}.dr{background:#ff5f56}.dy{background:#ffbd2e}.dg{background:#27c93f}
+.tt{font-family:var(--m);font-size:12px;color:var(--dim);margin-left:8px}
+.term pre{padding:24px;font-size:14px;line-height:1.75;overflow-x:auto}
+.cm{color:#555}.fn{color:var(--ac)}.st{color:#f0c674}.kw{color:var(--ac2)}.op{color:#888}
+.sec{max-width:1200px;margin:0 auto;padding:96px 24px}
+.st2{font-family:var(--m);font-size:12px;color:var(--ac);margin-bottom:12px;letter-spacing:.1em;text-transform:uppercase}
+.sec h2{font-size:clamp(28px,4vw,44px);font-weight:700;letter-spacing:-.02em;margin-bottom:16px;max-width:760px;line-height:1.15}
+.ss{color:var(--dim);font-size:18px;max-width:640px;margin-bottom:56px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+@media(max-width:900px){.g3,.g4{grid-template-columns:1fr 1fr}}@media(max-width:600px){.g3,.g4{grid-template-columns:1fr}}
+.card{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:24px;transition:all .2s}.card:hover{border-color:var(--ac);transform:translateY(-2px)}
+.ci{font-family:var(--m);font-size:11px;color:var(--ac);margin-bottom:16px;letter-spacing:.05em}
+.card h3{font-size:18px;font-weight:600;margin-bottom:8px}.card p{color:var(--dim);font-size:14px}
+.prod{background:linear-gradient(135deg,var(--bg2),#0d0d0d);border:1px solid var(--bd);border-radius:16px;padding:32px;transition:all .2s;display:flex;flex-direction:column}
+.prod:hover{border-color:var(--ac);transform:translateY(-2px)}
+.pn{font-family:var(--m);font-size:13px;color:var(--ac);margin-bottom:8px}
+.prod h3{font-size:22px;font-weight:700;margin-bottom:12px;letter-spacing:-.01em}
+.prod p{color:var(--dim);margin-bottom:24px;font-size:15px;flex:1}
+.pl{display:flex;gap:16px;flex-wrap:wrap;padding-top:16px;border-top:1px solid var(--bd)}
+.pl a{font-family:var(--m);font-size:13px;color:var(--ac);transition:opacity .15s}.pl a:hover{opacity:.7}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;padding:48px;background:var(--bg2);border:1px solid var(--bd);border-radius:16px}
+@media(max-width:700px){.stats{grid-template-columns:1fr 1fr;gap:24px;padding:32px}}
+.sn{font-family:var(--m);font-size:clamp(28px,4vw,40px);font-weight:700;color:var(--ac);letter-spacing:-.02em}.sl{color:var(--dim);font-size:13px;margin-top:4px}
+.cta{text-align:center;padding:96px 24px;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);background:radial-gradient(ellipse at center,rgba(0,217,255,.06),transparent 70%)}
+.cta h2{font-size:clamp(28px,4vw,40px);margin-bottom:16px}.cta p{color:var(--dim);margin-bottom:32px}
+footer{padding:64px 24px 48px}
+.fi{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.5fr 3fr;gap:48px}@media(max-width:720px){.fi{grid-template-columns:1fr}}
+.fb{font-family:var(--m);color:var(--ac);font-weight:700;font-size:18px}
+.fm{font-size:13px;color:var(--dim);margin-top:12px;line-height:1.7}
+.fc{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}@media(max-width:600px){.fc{grid-template-columns:1fr 1fr}}
+.fc h4{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:14px}
+.fc a{display:block;font-size:14px;padding:4px 0;color:var(--fg);transition:color .15s}.fc a:hover{color:var(--ac)}
+</style>
+</head>
+<body>
+<nav><div class="nav-inner"><a href="#" class="brand">▮ voxcore</a><div class="nav-links"><a href="#features">Features</a><a href="#products">Products</a><a href="#install">Install</a><a href="https://github.com/tianjimeteor/VoxCore/tree/main/docs">Docs</a></div><a href="https://github.com/tianjimeteor/VoxCore" class="nav-cta">GitHub →</a></div></nav>
+<section class="hero">
+<span class="tag">v0.1.0 — Apache 2.0 — production-ready</span>
+<h1>Real-time voice AI,<br><span class="g">with one facade.</span></h1>
+<p class="sub">Streaming ASR + LLM + Vision with sub-second latency. Pluggable adapters, secure by default. Build voice agents, captioning overlays, and meeting notebooks — without the glue code.</p>
+<div class="row">
+<a href="https://github.com/tianjimeteor/VoxCore" class="btn btn-p">★ Star on GitHub</a>
+<a href="#install" class="btn btn-g">$ pip install voxcore</a>
+<a href="https://github.com/tianjimeteor/VoxCore/releases/tag/voxstream-v0.1.0" class="btn btn-g">↓ Download apps</a>
+</div>
+<div class="term" id="install">
+<div class="bar"><span class="dot dr"></span><span class="dot dy"></span><span class="dot dg"></span><span class="tt">~/voice-agent — bash</span></div>
+<pre><span class="cm"># Install</span>
+<span class="op">$</span> pip install voxcore
+
+<span class="cm"># Stream ASR + LLM in 6 lines</span>
+<span class="kw">from</span> voxcore <span class="kw">import</span> Engine
+
+<span class="kw">async with</span> <span class="fn">Engine</span>(asr=<span class="st">"whisper-local"</span>, llm=<span class="st">"gpt-4o-mini"</span>) <span class="kw">as</span> e:
+    <span class="kw">async for</span> chunk <span class="kw">in</span> e.<span class="fn">stream</span>(mic=<span class="kw">True</span>):
+        <span class="fn">print</span>(chunk.text, end=<span class="st">""</span>)</pre>
+</div>
+</section>
+<section class="sec" id="features">
+<div class="st2">// Core</div>
+<h2>Built for low latency, designed for swap-in.</h2>
+<p class="ss">A single facade hides the complexity of audio capture, ASR streaming, LLM token streams, and TTS playback. Adapters are pluggable — bring your own model.</p>
+<div class="g4">
+<div class="card"><div class="ci">[01]</div><h3>Sub-second latency</h3><p>End-to-end streaming under 700 ms p50, mic to first LLM token.</p></div>
+<div class="card"><div class="ci">[02]</div><h3>One facade</h3><p>Swap ASR / LLM / TTS adapters without touching application code.</p></div>
+<div class="card"><div class="ci">[03]</div><h3>Secure by default</h3><p>Local inference path, redacted logs, JWT-gated WebSocket, no telemetry.</p></div>
+<div class="card"><div class="ci">[04]</div><h3>Production-ready</h3><p>FastAPI gateway, WebSocket fan-out, Docker-shipped, CI on 3.10–3.12.</p></div>
+</div>
+</section>
+<section class="sec">
+<div class="stats">
+<div><div class="sn">&lt; 700ms</div><div class="sl">p50 mic → first token</div></div>
+<div><div class="sn">12+</div><div class="sl">built-in adapters</div></div>
+<div><div class="sn">3.10+</div><div class="sl">Python versions</div></div>
+<div><div class="sn">100%</div><div class="sl">offline-capable</div></div>
+</div>
+</section>
+<section class="sec" id="products">
+<div class="st2">// Products</div>
+<h2>One engine. Two desktop apps. Open-source today.</h2>
+<p class="ss">VoxCore is the SDK. VoxStream and VoxNote are reference end-user products built on top of it — fully open-source, downloadable today.</p>
+<div class="g3">
+<div class="prod"><div class="pn">@voxcore/sdk</div><h3>VoxCore</h3><p>The streaming voice AI engine. Mic → ASR → LLM → TTS in one async iterator. Adapters for Whisper, OpenAI, DeepSeek, Edge-TTS.</p><div class="pl"><a href="https://github.com/tianjimeteor/VoxCore">github →</a><a href="https://github.com/tianjimeteor/VoxCore/tree/main/docs">docs →</a></div></div>
+<div class="prod"><div class="pn">@voxcore/voxstream</div><h3>VoxStream</h3><p>Live captioning overlay for OBS / streamers. Bilingual, low-CPU, drag-anywhere overlay window. Win / macOS / Linux.</p><div class="pl"><a href="https://github.com/tianjimeteor/VoxCore/releases/tag/voxstream-v0.1.0">download →</a><a href="https://github.com/tianjimeteor/VoxCore/tree/main/apps/voxstream">readme →</a></div></div>
+<div class="prod"><div class="pn">@voxcore/voxnote</div><h3>VoxNote</h3><p>Privacy-first meeting notebook. 100% local inference (Whisper + SQLite FTS5). Markdown / SRT export, todo extraction.</p><div class="pl"><a href="https://github.com/tianjimeteor/VoxCore/tree/main/apps/voxnote">readme →</a><a href="https://github.com/tianjimeteor/VoxCore">source →</a></div></div>
+</div>
+</section>
+<section class="cta">
+<h2>Ready to ship voice in your next demo?</h2>
+<p>Read the quickstart, run an example, file an issue. We're listening.</p>
+<div class="row" style="justify-content:center">
+<a href="https://github.com/tianjimeteor/VoxCore/blob/main/docs/quickstart.md" class="btn btn-p">→ Quickstart</a>
+<a href="https://github.com/tianjimeteor/VoxCore" class="btn btn-g">★ GitHub</a>
+</div>
+</section>
+<footer><div class="fi"><div><div class="fb">▮ voxcore</div><p class="fm">Real-time voice AI engine.<br>Apache 2.0 — © 2026 tianjimeteor.</p></div><div class="fc"><div><h4>Project</h4><a href="https://github.com/tianjimeteor/VoxCore">GitHub</a><a href="https://github.com/tianjimeteor/VoxCore/releases">Releases</a><a href="https://github.com/tianjimeteor/VoxCore/blob/main/LICENSE">License</a></div><div><h4>Docs</h4><a href="https://github.com/tianjimeteor/VoxCore/blob/main/docs/quickstart.md">Quickstart</a><a href="https://github.com/tianjimeteor/VoxCore/blob/main/docs/architecture.md">Architecture</a><a href="https://github.com/tianjimeteor/VoxCore/blob/main/docs/security.md">Security</a></div><div><h4>Community</h4><a href="https://github.com/tianjimeteor/VoxCore/blob/main/CONTRIBUTING.md">Contribute</a><a href="https://github.com/tianjimeteor/VoxCore/blob/main/CODE_OF_CONDUCT.md">Conduct</a><a href="https://github.com/tianjimeteor/VoxCore/issues">Issues</a></div></div></div></footer>
+</body>
+</html>
