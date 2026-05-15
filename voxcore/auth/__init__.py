@@ -4,10 +4,10 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 from typing import Any
 
+import bcrypt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from ..config import get_settings
@@ -15,22 +15,31 @@ from ..database import get_db
 from ..models import User
 
 settings = get_settings()
-_pwd = CryptContext(schemes=["bcrypt"], deprecated="auto")
 _bearer = HTTPBearer(auto_error=True)
+# bcrypt has a hard 72-byte limit; we truncate consistently on hash + verify so that
+# long passwords are still accepted (matching the legacy passlib behaviour).
+_BCRYPT_LIMIT = 72
 
 
 # ----- password --------------------------------------------------------------
+
+def _encode_password(plain: str) -> bytes:
+    return plain.encode("utf-8")[:_BCRYPT_LIMIT]
+
 
 def hash_password(plain: str) -> str:
     if len(plain) < settings.min_password_length:
         raise ValueError(
             f"password must be at least {settings.min_password_length} characters"
         )
-    return _pwd.hash(plain)  # type: ignore[no-any-return]
+    return bcrypt.hashpw(_encode_password(plain), bcrypt.gensalt()).decode("utf-8")
 
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return _pwd.verify(plain, hashed)  # type: ignore[no-any-return]
+    try:
+        return bcrypt.checkpw(_encode_password(plain), hashed.encode("utf-8"))
+    except ValueError:
+        return False
 
 
 # ----- JWT -------------------------------------------------------------------

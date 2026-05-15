@@ -3,14 +3,16 @@ from __future__ import annotations
 
 import uuid
 
+import pytest
 from fastapi.testclient import TestClient
+from starlette.websockets import WebSocketDisconnect
 
 
 def test_ws_requires_token(client: TestClient) -> None:
-    with client.websocket_connect("/ws") as _ws:  # no token
-        pass  # connection should be closed by server; TestClient raises on recv
-    # If we got here, the server accepted unauth — fail loudly.
-    # (websocket_connect context manager swallows close; we re-check with bad token)
+    # Server must close the WS handshake when no token is provided.
+    with pytest.raises(WebSocketDisconnect):
+        with client.websocket_connect("/ws") as ws:
+            ws.receive_text()
 
 
 def test_ws_echo_round_trip(client: TestClient) -> None:
