@@ -54,6 +54,7 @@ dev = [
     "pytest>=7.4",
     "pytest-asyncio>=0.21",
     "pytest-cov>=4.1",
+    "pytest-timeout>=2.2",
     "ruff>=0.3",
     "mypy>=1.8",
     "types-python-jose",
@@ -108,5 +109,6 @@ addopts = [
     "--strict-config",
     "--cov=voxcore",
     "--cov-report=term-missing",
+    "--timeout=30",
 ]
 testpaths = ["tests"]
